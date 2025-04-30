@@ -73,6 +73,20 @@ Before using the mcp server, you should prepare a config.yaml to save your workf
   api_key: 'API Key:API Secret'   # required
 ```
 
+### Set workflow info in Environment Variable
+You can also choose to set workflow info in environment variables. For example, configure environment variables in Dockerfile:
+```Dokerfile
+ENV FLOWS='[ \
+  { \
+    "flow_id": "id1", \
+    "name": "flow1", \
+    "description": "desc1", \
+    "api_key": "key1:secret1" \
+  } \
+]'
+```
+
+
 #### Get workflow authentication information
 1. [Create a bot](https://xinghuo.xfyun.cn/botcenter/createbot)
 ![](./images/create_workflow.png)
