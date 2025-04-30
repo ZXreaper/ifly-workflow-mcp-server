@@ -21,16 +21,22 @@ class SysTool(Enum):
 class IFlyWorkflowClient(ABC):
     base_url = "https://xingchen-api.xf-yun.com"
 
-    def __init__(self, config_path: str = os.getenv("CONFIG_PATH")):
+    def __init__(self, config_path: str = os.getenv("CONFIG_PATH"), env_config: str = os.getenv("FLOWS")):
         """
         init
         :param config_path: config path，default is CONFIG_PATH
         """
-        if not config_path:
-            raise ValueError("CONFIG_PATH is not set")
-
-        with open(config_path, 'r', encoding='utf-8') as file:
-            self.flows = [Flow(**flow) for flow in yaml.safe_load(file)]
+        self.flows = []
+        if config_path:
+            with open(config_path, 'r', encoding='utf-8') as file:
+                for flow in yaml.safe_load(file):
+                    self.flows.append(Flow(**flow))
+        if env_config:
+            flows = json.loads(env_config)
+            for flow in flows:
+                self.flows.append(Flow(**flow))
+        if len(self.flows) == 0:
+            raise Exception("Unable to find config in CONFIG_PATH or environment variables.")
         self.name_idx: Dict[str, int] = {}
 
         # get flow info
